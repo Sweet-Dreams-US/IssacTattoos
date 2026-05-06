@@ -20,6 +20,13 @@ const el = (tag, props={}, ...kids) => {
   return n;
 };
 
+/* ---------- theme: load early so no flash. Dark is the brand default. ---------- */
+(() => {
+  let saved = null;
+  try { saved = localStorage.getItem('reliquary-theme'); } catch {}
+  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+})();
+
 /* ---------- loader ---------- */
 window.addEventListener('load', () => {
   const start = performance.now();
@@ -31,6 +38,19 @@ window.addEventListener('load', () => {
   const left = Math.max(0, minHold - (performance.now() - start));
   setTimeout(release, left);
 });
+
+/* ---------- theme toggle ---------- */
+(() => {
+  const btn = $('[data-theme-toggle]');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const next = isLight ? 'dark' : 'light';
+    if (next === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    else document.documentElement.removeAttribute('data-theme');
+    try { localStorage.setItem('reliquary-theme', next); } catch {}
+  });
+})();
 
 /* ---------- custom cursor ---------- */
 (() => {
@@ -189,7 +209,7 @@ const RELICS = [
 
 /* ---------- intersection observer for fadein ---------- */
 (() => {
-  const targets = $$('.fadein, .creed, .step, .visit__card, .section-head');
+  const targets = $$('.fadein, .creed, .step, .visit__card, .section-head, .flash-card');
   targets.forEach(t => t.classList.add('fadein'));
   const io = new IntersectionObserver(es => {
     es.forEach(e => {
@@ -200,6 +220,39 @@ const RELICS = [
     });
   }, { threshold:.1, rootMargin:'-50px 0px' });
   targets.forEach(t => io.observe(t));
+})();
+
+/* ---------- magnetic buttons (subtle pull toward cursor) ---------- */
+(() => {
+  if (reduced) return;
+  const fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if (!fine) return;
+  const targets = $$('.btn, .nav__cta, .nav__theme, .link-arrow');
+  targets.forEach(t => {
+    let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
+    const inner = t.querySelector('.btn__label') || t.firstElementChild || t;
+    t.style.willChange = 'transform';
+    t.addEventListener('mousemove', e => {
+      const r = t.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width/2));
+      const dy = (e.clientY - (r.top + r.height/2));
+      tx = dx * 0.18;
+      ty = dy * 0.22;
+      if (!raf) raf = requestAnimationFrame(loop);
+    });
+    t.addEventListener('mouseleave', () => { tx = 0; ty = 0; });
+    const loop = () => {
+      cx += (tx - cx) * 0.18;
+      cy += (ty - cy) * 0.18;
+      t.style.transform = `translate(${cx}px, ${cy}px)`;
+      if (Math.abs(tx-cx) > 0.1 || Math.abs(ty-cy) > 0.1) {
+        raf = requestAnimationFrame(loop);
+      } else {
+        t.style.transform = '';
+        raf = 0;
+      }
+    };
+  });
 })();
 
 /* ---------- staggered reveal delays ---------- */
