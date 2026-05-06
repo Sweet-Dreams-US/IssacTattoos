@@ -20,11 +20,11 @@ const el = (tag, props={}, ...kids) => {
   return n;
 };
 
-/* ---------- theme: load early so no flash. Dark is the brand default. ---------- */
+/* ---------- theme: load early so no flash. Light parchment is the brand default. ---------- */
 (() => {
   let saved = null;
   try { saved = localStorage.getItem('reliquary-theme'); } catch {}
-  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
 })();
 
 /* ---------- loader ---------- */
@@ -39,14 +39,14 @@ window.addEventListener('load', () => {
   setTimeout(release, left);
 });
 
-/* ---------- theme toggle ---------- */
+/* ---------- theme toggle (light is default; dark is opt-in) ---------- */
 (() => {
   const btn = $('[data-theme-toggle]');
   if (!btn) return;
   btn.addEventListener('click', () => {
-    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    const next = isLight ? 'dark' : 'light';
-    if (next === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    if (next === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
     else document.documentElement.removeAttribute('data-theme');
     try { localStorage.setItem('reliquary-theme', next); } catch {}
   });

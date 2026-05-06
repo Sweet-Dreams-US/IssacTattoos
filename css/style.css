@@ -4,20 +4,81 @@
 ========================================================= */
 
 :root{
-  /* ink palette - DARK (default) */
+  /* DEFAULT THEME = LIGHT — aged parchment with bronze/gold accents */
+
+  /* dark-loader colors — always available (used by .loader regardless of theme) */
+  --loader-bg:#0A0908;
+  --loader-fg:#EDE6D5;
+  --loader-accent:#B89968;
+
+  /* light theme tokens (the brand) */
+  --pitch:#EAE0C2;          /* parchment ground */
+  --ink:#E1D5B2;            /* deeper page */
+  --shadow:#D7C8A0;         /* elevated panels (cards) */
+  --bone:#1B130A;           /* deep sepia ink — body text */
+  --bone-warm:#33231A;      /* warm secondary text */
+  --parchment:#F3EAD0;      /* highlight / hairline */
+  --crimson:#7A1D22;        /* oxblood */
+  --crimson-deep:#4B0F11;
+  --brass:#9C7838;          /* warm bronze on light */
+  --brass-deep:#6B501F;     /* deeper bronze for hover/contrast */
+  --gold:#B8923D;           /* gilt accent */
+  --ash:#6E5A3E;            /* muted secondary */
+
+  /* semantic */
+  --bg:var(--pitch);
+  --bg-soft:var(--ink);
+  --bg-elevated:var(--shadow);
+  --fg:var(--bone);
+  --fg-warm:var(--bone-warm);
+  --fg-mute:var(--ash);
+  --accent:var(--brass);
+  --accent-deep:var(--brass-deep);
+  --rule:rgba(156,120,56,.32);
+  --rule-strong:rgba(156,120,56,.55);
+  --line-faint:rgba(156,120,56,.22);
+  --line-mute:rgba(27,19,10,.28);
+  --invert-fg:var(--pitch);
+  --grain-opacity:.10;
+  --grain-mode:multiply;
+  --hero-vignette:radial-gradient(800px 600px at 50% 30%, rgba(156,120,56,.18), transparent 60%), radial-gradient(900px 700px at 50% 100%, rgba(122,29,34,.10), transparent 70%);
+  --bg-gradient:radial-gradient(1200px 800px at 50% -10%, #F3EAD0 0%, #E1D5B2 60%) no-repeat, var(--pitch);
+  --image-filter:grayscale(.85) contrast(1.18) brightness(.92) sepia(.18);
+  --image-filter-hover:grayscale(.7) contrast(1.22) brightness(.98) sepia(.12);
+  --photo-filter:grayscale(.8) contrast(1.12) brightness(.92) sepia(.28);
+  --frame-blend:multiply;
+
+  /* type */
+  --display:'Cinzel', serif;
+  --display-italic:'Cormorant Garamond', serif;
+  --serif:'EB Garamond', serif;
+  --black:'UnifrakturCook', 'Cinzel', serif;
+
+  /* sizing */
+  --gut:clamp(20px, 4vw, 64px);
+  --section:clamp(80px, 12vh, 160px);
+
+  /* curves */
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-in:cubic-bezier(.7,0,.84,0);
+}
+
+/* =========================================================
+   DARK THEME — opt-in via toggle, [data-theme="dark"] on <html>
+========================================================= */
+[data-theme="dark"]{
   --pitch:#0A0908;
   --ink:#141210;
   --shadow:#1F1B17;
   --bone:#EDE6D5;
   --bone-warm:#E5DBC4;
   --parchment:#D9CDB1;
-  --crimson:#7A1D22;
-  --crimson-deep:#4B0F11;
   --brass:#B89968;
   --brass-deep:#8C7044;
+  --gold:#C8A65A;
   --ash:#6B6157;
 
-  /* semantic — overridden by [data-theme="light"] */
   --bg:var(--pitch);
   --bg-soft:var(--ink);
   --bg-elevated:var(--shadow);
@@ -39,62 +100,6 @@
   --image-filter-hover:grayscale(.9) contrast(1.1) brightness(1);
   --photo-filter:grayscale(1) contrast(1.05) brightness(.86) sepia(.18);
   --frame-blend:normal;
-
-  /* type */
-  --display:'Cinzel', serif;
-  --display-italic:'Cormorant Garamond', serif;
-  --serif:'EB Garamond', serif;
-  --black:'UnifrakturCook', 'Cinzel', serif;
-
-  /* sizing */
-  --gut:clamp(20px, 4vw, 64px);
-  --section:clamp(80px, 12vh, 160px);
-
-  /* curves */
-  --ease:cubic-bezier(.22,.61,.36,1);
-  --ease-out:cubic-bezier(.16,1,.3,1);
-  --ease-in:cubic-bezier(.7,0,.84,0);
-}
-
-/* =========================================================
-   LIGHT THEME — aged parchment / antique medical plate
-   Brass stays as the metallic thread; bone/pitch flip; crimson for highlights.
-========================================================= */
-[data-theme="light"]{
-  /* flip the body tokens - what was "bone" (light) is now dark ink */
-  --pitch:#EFE5C8;          /* aged parchment */
-  --ink:#E5DAB6;            /* slightly deeper page */
-  --shadow:#D9CCA4;         /* deeper still, used as elevated panels */
-  --bone:#1A140C;           /* dark sepia — body text */
-  --bone-warm:#33271A;      /* slightly warmer text */
-  --ash:#6E5C42;            /* muted secondary */
-  /* brass and crimson stay; brass is now warm metal on cream */
-  --brass:#8C6B3A;          /* slightly deeper brass for contrast on light */
-  --brass-deep:#5E4824;
-  --crimson:#7A1D22;
-  --crimson-deep:#4B0F11;
-
-  --bg:var(--pitch);
-  --bg-soft:var(--ink);
-  --bg-elevated:var(--shadow);
-  --fg:var(--bone);
-  --fg-warm:var(--bone-warm);
-  --fg-mute:var(--ash);
-  --accent:var(--brass);
-  --accent-deep:var(--brass-deep);
-  --rule:rgba(140,107,58,.32);
-  --rule-strong:rgba(140,107,58,.55);
-  --line-faint:rgba(140,107,58,.22);
-  --line-mute:rgba(26,20,12,.32);
-  --invert-fg:var(--pitch);
-  --grain-opacity:.08;
-  --grain-mode:multiply;
-  --hero-vignette:radial-gradient(800px 600px at 50% 30%, rgba(140,107,58,.10), transparent 60%), radial-gradient(900px 700px at 50% 100%, rgba(122,29,34,.10), transparent 70%);
-  --bg-gradient:radial-gradient(1200px 800px at 50% -10%, #F4EBCF 0%, #E5DAB6 60%) no-repeat, #EFE5C8;
-  --image-filter:sepia(.34) grayscale(.85) contrast(1.05) brightness(1.05);
-  --image-filter-hover:sepia(.24) grayscale(.7) contrast(1.1) brightness(1.08);
-  --photo-filter:sepia(.45) grayscale(.85) contrast(1.05) brightness(1.05);
-  --frame-blend:multiply;
 }
 
 /* =========================================================
@@ -1202,10 +1207,11 @@ body.is-ready .altar__cross *{animation-delay:1.8s}
 }
 .nav__theme:hover{border-color:var(--fg);transform:rotate(40deg)}
 .nav__theme-icon{position:absolute;width:18px;height:18px;transition:opacity .4s var(--ease),transform .5s var(--ease)}
+/* Default = light. Show MOON (click → dark). In dark, show SUN. */
 .nav__theme-icon--moon{opacity:1;transform:rotate(0)}
-.nav__theme-icon--sun{opacity:0;transform:rotate(-90deg)}
-[data-theme="light"] .nav__theme-icon--moon{opacity:0;transform:rotate(90deg)}
-[data-theme="light"] .nav__theme-icon--sun{opacity:1;transform:rotate(0)}
+.nav__theme-icon--sun{opacity:0;transform:rotate(90deg)}
+[data-theme="dark"] .nav__theme-icon--moon{opacity:0;transform:rotate(-90deg)}
+[data-theme="dark"] .nav__theme-icon--sun{opacity:1;transform:rotate(0)}
 @media (max-width:900px){
   .nav__theme{width:34px;height:34px}
   .nav__theme-icon{width:16px;height:16px}
@@ -1318,70 +1324,131 @@ body.is-ready .altar__cross *{animation-delay:1.8s}
 }
 
 /* =========================================================
-   THEME-AWARE TRANSLUCENT OVERRIDES (LIGHT)
-   Hardcoded rgba(237,230,213,...) and rgba(10,9,8,...) need flips.
+   LIGHT THEME REFINEMENTS (default — applied always)
+   These override the hardcoded translucent values from earlier
+   that were tuned for the dark-default era.
 ========================================================= */
-[data-theme="light"] body{background:var(--bg-gradient);background-attachment:fixed}
-[data-theme="light"] .nav.is-stuck{background:rgba(239,229,200,.85);border-bottom-color:var(--rule)}
-[data-theme="light"] .nav__cta{border-color:var(--line-mute);color:var(--fg)}
-[data-theme="light"] .nav__cta:hover{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-[data-theme="light"] .nav__menu span{background:var(--fg)}
-[data-theme="light"] body.menu-open .nav__links{background:rgba(239,229,200,.96)}
-[data-theme="light"] .btn--primary{background:var(--fg);color:var(--bg)}
-[data-theme="light"] .btn--primary:hover{background:var(--accent);color:var(--bg)}
-[data-theme="light"] .btn--ghost{border-color:var(--line-mute);color:var(--fg)}
-[data-theme="light"] .btn--ghost:hover{border-color:var(--fg);background:rgba(26,20,12,.06)}
-[data-theme="light"] .marquee{background:rgba(217,204,164,.5)}
-[data-theme="light"] .creed{background:var(--bg)}
-[data-theme="light"] .creed:hover{background:var(--bg-elevated)}
-[data-theme="light"] .step{background:var(--bg)}
-[data-theme="light"] .step:hover{background:var(--bg-elevated)}
-[data-theme="light"] .visit__card{background:var(--bg)}
-[data-theme="light"] .visit__card:hover{background:var(--bg-elevated)}
-[data-theme="light"] .relic{background:var(--bg-soft);border-color:transparent}
-[data-theme="light"] .relic:hover{border-color:var(--rule-strong)}
-[data-theme="light"] .relic__plate{background:linear-gradient(transparent, rgba(239,229,200,.88) 30%, rgba(239,229,200,.97))}
-[data-theme="light"] .lightbox{background:rgba(239,229,200,.96)}
-[data-theme="light"] .lightbox__close{color:var(--accent);border-color:var(--accent)}
-[data-theme="light"] .lightbox__frame img{border-color:var(--rule-strong)}
-[data-theme="light"] .booking{background:linear-gradient(var(--bg), var(--bg-soft))}
-[data-theme="light"] .field input,
-[data-theme="light"] .field select,
-[data-theme="light"] .field textarea{
-  border-bottom-color:var(--line-mute);color:var(--fg);
-}
-[data-theme="light"] .field input:focus,
-[data-theme="light"] .field select:focus,
-[data-theme="light"] .field textarea:focus{border-bottom-color:var(--fg)}
-[data-theme="light"] .field select option{background:var(--bg);color:var(--fg)}
-[data-theme="light"] .foot{background:linear-gradient(var(--bg-soft), var(--bg-elevated));border-top-color:var(--rule)}
-[data-theme="light"] .foot__sub{color:var(--fg-mute)}
-[data-theme="light"] .grain{display:none}  /* parchment look already textured by tones */
-[data-theme="light"] .interlude{background:var(--bg-soft)}
-[data-theme="light"] .interlude__caption{background:rgba(239,229,200,.7);border-color:var(--line-mute)}
-[data-theme="light"] .visit__bg::after{
-  background:linear-gradient(180deg, rgba(239,229,200,.92), rgba(239,229,200,.85) 40%, rgba(239,229,200,.96));
-}
-[data-theme="light"] .visit__bg img{filter:sepia(.45) grayscale(.5) brightness(.95) contrast(1)}
-[data-theme="light"] .booking__signoff{color:var(--accent)}
-[data-theme="light"] .creed svg,
-[data-theme="light"] .step__icon,
-[data-theme="light"] .visit__icon,
-[data-theme="light"] .nav__sigil,
-[data-theme="light"] .foot__sigil{color:var(--accent)}
-[data-theme="light"] .hero__altar{opacity:.46}
-[data-theme="light"] .lightbox__frame img{filter:sepia(.34) grayscale(.85) contrast(1.05)}
-[data-theme="light"] .relic__media img,
-[data-theme="light"] .interlude__media img{filter:var(--image-filter)}
-[data-theme="light"] .relic:hover .relic__media img{filter:var(--image-filter-hover)}
-[data-theme="light"] .artist__photo{filter:var(--photo-filter)}
-[data-theme="light"] .cursor{mix-blend-mode:multiply}
-[data-theme="light"] .cursor__dot{background:var(--fg)}
-[data-theme="light"] .cursor__ring{border-color:rgba(26,20,12,.55)}
-[data-theme="light"] .flash{background:var(--bg-elevated)}
-[data-theme="light"] .flash-card{background:var(--bg-soft)}
-[data-theme="light"] .flash-card:hover{background:var(--bg)}
-[data-theme="light"] .flash-card[data-status="claimed"]::before{background:rgba(122,29,34,.06)}
+.nav.is-stuck{background:rgba(234,224,194,.86);border-bottom-color:var(--rule)}
+.nav__cta{border-color:var(--line-mute);color:var(--fg)}
+.nav__cta:hover{background:var(--fg);color:var(--invert-fg);border-color:var(--fg)}
+.nav__menu span{background:var(--fg)}
+body.menu-open .nav__links{background:rgba(234,224,194,.97)}
+.btn--primary{background:var(--fg);color:var(--invert-fg)}
+.btn--primary:hover{background:var(--accent);color:var(--invert-fg)}
+.btn--ghost{border-color:var(--line-mute);color:var(--fg)}
+.btn--ghost:hover{border-color:var(--fg);background:rgba(27,19,10,.05)}
+.marquee{background:rgba(215,200,160,.6)}
+.creed{background:var(--bg)}
+.creed:hover{background:var(--bg-elevated)}
+.step{background:var(--bg)}
+.step:hover{background:var(--bg-elevated)}
+.visit__card{background:var(--bg)}
+.visit__card:hover{background:var(--bg-elevated)}
+.relic{background:var(--bg-soft);border-color:transparent}
+.relic:hover{border-color:var(--rule-strong)}
+.relic__plate{background:linear-gradient(transparent, rgba(234,224,194,.86) 30%, rgba(234,224,194,.97))}
+.lightbox{background:rgba(234,224,194,.96)}
+.lightbox__close{color:var(--accent);border-color:var(--accent)}
+.lightbox__frame img{border-color:var(--rule-strong)}
+.booking{background:linear-gradient(var(--bg), var(--bg-soft));border-top-color:var(--rule)}
+.field input,.field select,.field textarea{border-bottom-color:var(--line-mute);color:var(--fg)}
+.field input:focus,.field select:focus,.field textarea:focus{border-bottom-color:var(--fg)}
+.field select option{background:var(--bg);color:var(--fg)}
+.foot{background:linear-gradient(var(--bg-soft), var(--bg-elevated));border-top-color:var(--rule)}
+.foot__sub{color:var(--fg-mute)}
+.interlude{background:var(--bg-soft)}
+.interlude__caption{background:rgba(234,224,194,.74);border-color:var(--line-mute)}
+.visit__bg::after{background:linear-gradient(180deg, rgba(234,224,194,.92), rgba(234,224,194,.85) 40%, rgba(234,224,194,.96))}
+.visit__bg img{filter:sepia(.45) grayscale(.5) brightness(.95) contrast(1)}
+.booking__signoff{color:var(--accent)}
+.flash{background:var(--bg-elevated)}
+.flash-card{background:var(--bg-soft)}
+.flash-card:hover{background:var(--bg)}
+.flash-card[data-status="claimed"]::before{background:rgba(122,29,34,.06)}
+
+/* default (light) cursor */
+.cursor{mix-blend-mode:multiply}
+.cursor__dot{background:var(--fg)}
+.cursor__ring{border-color:rgba(27,19,10,.55)}
+
+/* light grain — always on for paper texture */
+.grain{filter:invert(.7)}
+
+/* tattoo image filters - high contrast b&w on parchment */
+.relic__media img,
+.interlude__media img{filter:var(--image-filter)}
+.relic:hover .relic__media img{filter:var(--image-filter-hover)}
+.artist__photo{filter:var(--photo-filter)}
+
+.hero__altar{opacity:.5}
+.lightbox__frame img{filter:var(--image-filter) saturate(.9)}
+
+/* =========================================================
+   DARK THEME OVERRIDES — flip translucent layers back to dark
+========================================================= */
+[data-theme="dark"] .nav.is-stuck{background:rgba(10,9,8,.78);border-bottom-color:rgba(184,153,104,.18)}
+[data-theme="dark"] .nav__cta{border-color:rgba(237,230,213,.3);color:var(--bone)}
+[data-theme="dark"] .nav__cta:hover{background:var(--bone);color:var(--pitch);border-color:var(--bone)}
+[data-theme="dark"] .nav__menu span{background:var(--bone)}
+[data-theme="dark"] body.menu-open .nav__links{background:rgba(10,9,8,.96)}
+[data-theme="dark"] .btn--primary{background:var(--bone);color:var(--pitch)}
+[data-theme="dark"] .btn--primary:hover{background:var(--brass);color:var(--pitch)}
+[data-theme="dark"] .btn--ghost{border-color:rgba(237,230,213,.4);color:var(--bone)}
+[data-theme="dark"] .btn--ghost:hover{border-color:var(--bone);background:rgba(237,230,213,.08)}
+[data-theme="dark"] .marquee{background:rgba(20,18,16,.4)}
+[data-theme="dark"] .creed,
+[data-theme="dark"] .step,
+[data-theme="dark"] .visit__card,
+[data-theme="dark"] .relic{background:var(--bg)}
+[data-theme="dark"] .creed:hover,
+[data-theme="dark"] .step:hover,
+[data-theme="dark"] .visit__card:hover{background:var(--bg-elevated)}
+[data-theme="dark"] .relic{background:var(--bg-elevated);border-color:transparent}
+[data-theme="dark"] .relic:hover{border-color:rgba(184,153,104,.35)}
+[data-theme="dark"] .relic__plate{background:linear-gradient(transparent, rgba(10,9,8,.85) 30%, rgba(10,9,8,.96))}
+[data-theme="dark"] .lightbox{background:rgba(10,9,8,.96)}
+[data-theme="dark"] .lightbox__close{color:var(--brass);border-color:var(--brass)}
+[data-theme="dark"] .lightbox__frame img{border-color:rgba(184,153,104,.4);filter:grayscale(.95) contrast(1.05)}
+[data-theme="dark"] .booking{background:linear-gradient(var(--pitch), var(--ink));border-top-color:rgba(184,153,104,.18)}
+[data-theme="dark"] .field input,
+[data-theme="dark"] .field select,
+[data-theme="dark"] .field textarea{border-bottom-color:rgba(184,153,104,.34);color:var(--bone)}
+[data-theme="dark"] .field input:focus,
+[data-theme="dark"] .field select:focus,
+[data-theme="dark"] .field textarea:focus{border-bottom-color:var(--bone)}
+[data-theme="dark"] .field select option{background:var(--pitch);color:var(--bone)}
+[data-theme="dark"] .foot{background:linear-gradient(var(--ink),#070605);border-top-color:rgba(184,153,104,.16)}
+[data-theme="dark"] .foot__sub{color:var(--ash)}
+[data-theme="dark"] .interlude{background:var(--ink)}
+[data-theme="dark"] .interlude__caption{background:rgba(10,9,8,.6);border-color:rgba(184,153,104,.3)}
+[data-theme="dark"] .visit__bg::after{background:linear-gradient(180deg, rgba(10,9,8,.92), rgba(10,9,8,.85) 40%, rgba(10,9,8,.96))}
+[data-theme="dark"] .visit__bg img{filter:grayscale(.6) brightness(.55) contrast(1.05);opacity:.55}
+[data-theme="dark"] .flash{background:var(--ink)}
+[data-theme="dark"] .flash-card{background:var(--pitch)}
+[data-theme="dark"] .flash-card:hover{background:var(--shadow)}
+[data-theme="dark"] .flash-card[data-status="claimed"]::before{background:transparent}
+
+[data-theme="dark"] .cursor{mix-blend-mode:difference}
+[data-theme="dark"] .cursor__dot{background:var(--bone)}
+[data-theme="dark"] .cursor__ring{border-color:rgba(237,230,213,.6)}
+
+[data-theme="dark"] .grain{filter:none}
+
+[data-theme="dark"] .relic__media img,
+[data-theme="dark"] .interlude__media img,
+[data-theme="dark"] .lightbox__frame img{filter:grayscale(1) contrast(1.05) brightness(.92)}
+[data-theme="dark"] .relic:hover .relic__media img{filter:grayscale(.9) contrast(1.1) brightness(1)}
+[data-theme="dark"] .artist__photo{filter:grayscale(1) contrast(1.05) brightness(.86) sepia(.18)}
+
+[data-theme="dark"] .hero__altar{opacity:.34}
+[data-theme="dark"] .booking__signoff{color:var(--brass)}
+
+/* =========================================================
+   LOADER — pinned to dark regardless of theme (ritual moment)
+========================================================= */
+.loader{background:var(--loader-bg);color:var(--loader-fg)}
+.loader__mark{color:var(--loader-accent)}
+.loader__sub{color:#6B6157}
 
 /* =========================================================
    MOBILE POLISH (the all-important pass)
@@ -1426,7 +1493,7 @@ body.is-ready .altar__cross *{animation-delay:1.8s}
   .works{padding:80px 0}
   .works__intro{font-size:clamp(16px,4vw,20px);margin-bottom:36px}
   .works__grid{gap:8px}
-  .relic__plate{padding:18px 16px 14px;transform:translateY(0);opacity:1;background:linear-gradient(transparent, rgba(10,9,8,.95))}
+  .relic__plate{padding:18px 16px 14px;transform:translateY(0);opacity:1}
   .relic__plate .kicker{font-size:8px}
   .relic__title{font-size:16px;margin:4px 0 2px}
   .relic__meta{font-size:10px}
@@ -1491,11 +1558,14 @@ body.is-ready .altar__cross *{animation-delay:1.8s}
     inset:0;
     height:100vh;height:100dvh;
     padding:80px 32px 40px;
-    background:radial-gradient(80% 60% at 50% 30%, rgba(31,27,23,.98), rgba(10,9,8,.99));
+    background:radial-gradient(80% 60% at 50% 30%, rgba(215,200,160,.98), rgba(234,224,194,.99));
     border-bottom:none;
     gap:18px;
     align-items:center;
     justify-content:center;
+  }
+  [data-theme="dark"] .nav__links{
+    background:radial-gradient(80% 60% at 50% 30%, rgba(31,27,23,.98), rgba(10,9,8,.99));
   }
   .nav__links a{font-family:var(--display);font-size:22px;letter-spacing:.32em;padding:14px 0}
   .nav__links a::after{display:none}
@@ -1511,9 +1581,6 @@ body.is-ready .altar__cross *{animation-delay:1.8s}
   body.menu-open .nav__links a:nth-child(6){animation-delay:.30s}
 }
 @keyframes menuRise{to{opacity:1;transform:none}}
-[data-theme="light"] @media (max-width:900px){
-  body.menu-open .nav__links{background:radial-gradient(80% 60% at 50% 30%, rgba(217,204,164,.98), rgba(239,229,200,.99))}
-}
 
 /* Mobile / touch — no custom cursor and disable parallax */
 @media (hover:none),(pointer:coarse){
