@@ -155,22 +155,32 @@ body.is-ready .depth__art.is-near.is-red{opacity:.42}
 /* Isaac's actual stencils — black PNGs on transparent bg, mix into the parchment */
 .depth__art.is-stencil{
   mix-blend-mode:multiply;
-  filter:contrast(1.1);
+  filter:contrast(1.15);
 }
-body.is-ready .depth__art.is-stencil{opacity:.20}
-body.is-ready .depth__art.is-stencil.is-far{opacity:.14}
-body.is-ready .depth__art.is-stencil.is-midfar{opacity:.18}
-body.is-ready .depth__art.is-stencil.is-mid{opacity:.22}
-body.is-ready .depth__art.is-stencil.is-midnear{opacity:.26}
-body.is-ready .depth__art.is-stencil.is-near{opacity:.32}
+body.is-ready .depth__art.is-stencil{opacity:.34}
+body.is-ready .depth__art.is-stencil.is-far{opacity:.22}
+body.is-ready .depth__art.is-stencil.is-midfar{opacity:.28}
+body.is-ready .depth__art.is-stencil.is-mid{opacity:.36}
+body.is-ready .depth__art.is-stencil.is-midnear{opacity:.40}
+body.is-ready .depth__art.is-stencil.is-near{opacity:.46}
 
 /* dark theme — invert stencils so the linework reads white on velvet */
 [data-theme="dark"] .depth__art.is-stencil{
   mix-blend-mode:screen;
-  filter:invert(1) contrast(1.1) brightness(.9);
+  filter:invert(1) contrast(1.15) brightness(.9);
 }
-[data-theme="dark"] body.is-ready .depth__art.is-stencil{opacity:.14}
-[data-theme="dark"] body.is-ready .depth__art.is-stencil.is-near{opacity:.22}
+[data-theme="dark"] body.is-ready .depth__art.is-stencil{opacity:.22}
+[data-theme="dark"] body.is-ready .depth__art.is-stencil.is-mid{opacity:.26}
+[data-theme="dark"] body.is-ready .depth__art.is-stencil.is-near{opacity:.34}
+
+/* On smaller screens shrink stencils proportionally */
+@media (max-width:980px){
+  .depth__art.is-stencil{width:calc(var(--w) * 0.65) !important}
+}
+@media (max-width:600px){
+  .depth__art.is-stencil{width:calc(var(--w) * 0.5) !important}
+  body.is-ready .depth__art.is-stencil{opacity:.22}
+}
 
 /* dark theme — shift to glowing inks on velvet */
 [data-theme="dark"] .depth__art{mix-blend-mode:screen}
@@ -749,12 +759,14 @@ body.is-ready .altar__cross *{animation-delay:1.8s}
 .interlude{
   position:relative;
   display:grid;
-  grid-template-columns:1.4fr 1fr;
+  grid-template-columns:1fr 1fr;
   gap:0;
   background:var(--ink);
   border-bottom:1px solid rgba(184,153,104,.18);
-  min-height:80vh;
+  min-height:60vh;
+  max-height:78vh;
 }
+.interlude__media{aspect-ratio:auto;height:100%;max-height:78vh}
 .interlude__media{
   position:relative;
   overflow:hidden;
@@ -968,6 +980,7 @@ body.is-ready .altar__cross *{animation-delay:1.8s}
   cursor:none;
   transition:transform .8s var(--ease);
   border:1px solid transparent;
+  max-height:78vh;
 }
 .relic:hover{transform:translateY(-4px);border-color:rgba(184,153,104,.35)}
 .relic__media{
@@ -1020,15 +1033,17 @@ body.is-ready .altar__cross *{animation-delay:1.8s}
 .relic__meta{font-size:12px;color:var(--ash);letter-spacing:.06em}
 
 /* big editorial layout */
-.relic--xl{grid-column:span 7}
-.relic--lg{grid-column:span 5}
+.relic--xl{grid-column:span 6}
+.relic--lg{grid-column:span 4}
 .relic--md{grid-column:span 4}
 .relic--sm{grid-column:span 3}
-.relic--portrait .relic__media{aspect-ratio:3/4}
+.relic--portrait .relic__media{aspect-ratio:4/5}     /* was 3/4 — flatter */
 .relic--landscape .relic__media{aspect-ratio:4/3}
 .relic--square .relic__media{aspect-ratio:1/1}
-.relic--tall .relic__media{aspect-ratio:9/16}
+.relic--tall .relic__media{aspect-ratio:3/4}         /* was 9/16 — was way too tall */
 .relic--wide .relic__media{aspect-ratio:16/10}
+.relic__media{max-height:70vh}
+.relic__media img{max-height:70vh}
 
 @media (max-width:1100px){
   .relic--xl{grid-column:span 12}
