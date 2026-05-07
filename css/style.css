@@ -173,13 +173,26 @@ body.is-ready .depth__art.is-stencil.is-near{opacity:.46}
 [data-theme="dark"] body.is-ready .depth__art.is-stencil.is-mid{opacity:.26}
 [data-theme="dark"] body.is-ready .depth__art.is-stencil.is-near{opacity:.34}
 
-/* On smaller screens shrink stencils proportionally */
+/* On smaller screens shrink stencils proportionally and prevent overflow */
 @media (max-width:980px){
-  .depth__art.is-stencil{width:calc(var(--w) * 0.65) !important}
+  .depth__art.is-stencil{
+    width:calc(var(--w) * 0.65) !important;
+    max-width:88vw;
+  }
 }
 @media (max-width:600px){
-  .depth__art.is-stencil{width:calc(var(--w) * 0.5) !important}
-  body.is-ready .depth__art.is-stencil{opacity:.22}
+  .depth__art.is-stencil{
+    width:calc(var(--w) * 0.5) !important;
+    max-width:78vw;
+  }
+  body.is-ready .depth__art.is-stencil{opacity:.32}
+  body.is-ready .depth__art.is-stencil.is-near{opacity:.40}
+}
+@media (max-width:420px){
+  .depth__art.is-stencil{
+    width:calc(var(--w) * 0.42) !important;
+    max-width:72vw;
+  }
 }
 
 /* dark theme — shift to glowing inks on velvet */
@@ -212,11 +225,18 @@ body.is-ready .depth__art.is-stencil.is-near{opacity:.46}
 .depth__art.is-midnear{animation:depthDrift 8s ease-in-out infinite}
 .depth__art.is-near{animation:depthDrift 7s ease-in-out infinite}
 
-/* mobile: thin out the depth field — keep only far + a few mid for atmosphere */
+/* MOBILE depth field — stencils stay (they're the wall), small SVG ornaments hide to reduce noise.
+   Big SVG far-layer pieces (cathedral arch, anatomy skull, compass) keep atmospheric backdrop. */
 @media (max-width:780px){
-  .depth__art{display:none}
-  .depth__art.is-far,
-  .depth__art.is-mid:nth-of-type(odd){display:block;opacity:.10 !important;width:calc(var(--w) * 0.7)}
+  /* hide small SVG decorative ornaments (anything under 280px wide) */
+  .depth__art:not(.is-stencil){opacity:.08}
+  /* keep the big atmospheric far-layer SVGs visible at low opacity */
+  .depth__art:not(.is-stencil).is-far{opacity:.14}
+}
+@media (max-width:600px){
+  /* on small phones, drop the small/medium SVG ornaments entirely — only big far-layer + stencils */
+  .depth__art:not(.is-stencil):not(.is-far){display:none}
+  .depth__art:not(.is-stencil).is-far{opacity:.10;width:calc(var(--w) * 0.7) !important;max-width:90vw}
 }
 
 @media (prefers-reduced-motion:reduce){
