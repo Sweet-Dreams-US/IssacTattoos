@@ -14,6 +14,16 @@ ORDER = [
     ("example6.png", "isaac-06.webp"),
     ("example7.png", "isaac-07.webp"),
     ("example8.png", "isaac-08.webp"),
+    ("example9.png", "isaac-09.webp"),
+    ("example10.png", "isaac-10.webp"),
+    ("example11.png", "isaac-11.webp"),
+    ("example12.png", "isaac-12.webp"),
+    ("example13.png", "isaac-13.webp"),
+    ("example14.png", "isaac-14.webp"),
+    ("example15.png", "isaac-15.webp"),
+    ("example16.png", "isaac-16.webp"),
+    ("example17.png", "isaac-17.webp"),
+    ("example18.png", "isaac-18.webp"),
 ]
 
 LONGEST = 1400  # target longest edge for gallery
