@@ -253,6 +253,8 @@ html{
   background-attachment:fixed;
   color:var(--fg);
   transition:background .8s var(--ease),color .8s var(--ease);
+  overflow-x:hidden;       /* belt+suspenders w/ body, prevents iOS rubber-band horizontal */
+  width:100%;
 }
 body{
   font-family:var(--serif);
@@ -261,6 +263,8 @@ body{
   color:var(--fg);
   background:transparent;  /* depth field shows through */
   overflow-x:hidden;
+  width:100%;
+  max-width:100vw;
   font-feature-settings:"liga","dlig","ss01";
   text-rendering:optimizeLegibility;
   -webkit-font-smoothing:antialiased;
@@ -1708,8 +1712,8 @@ body.menu-open .nav__links{background:rgba(234,224,194,.97)}
   .nav__menu{order:3}
   .nav{grid-template-columns:auto 1fr auto auto}
   .hero{padding:120px var(--gut) 60px;min-height:92vh}
-  .hero__altar{width:min(640px,140vw);opacity:.16}
-  .hero__title{font-size:clamp(54px,16vw,120px);letter-spacing:.06em;margin-bottom:24px}
+  .hero__altar{width:min(640px,95vw);opacity:.16}
+  .hero__title{font-size:clamp(44px,12.5vw,96px);letter-spacing:.02em;margin-bottom:22px}
   .hero__sub{font-size:clamp(17px,4vw,22px);margin-bottom:36px}
   .hero__cta-row{flex-direction:column;width:100%;align-items:stretch}
   .hero__cta-row .btn{justify-content:center;padding:18px 24px}
@@ -1781,7 +1785,10 @@ body.menu-open .nav__links{background:rgba(234,224,194,.97)}
   :root{--gut:16px}
   .hero{min-height:88vh;padding:104px 16px 48px}
   .hero__altar{opacity:.12}
-  .hero__title{font-size:18vw}
+  .hero__title{font-size:13.5vw;letter-spacing:0}
+  .hero__title-tail{gap:8px}
+  .hero__title-fleur::after,.hero__title-tail .hero__title-fleur:last-child::before{width:24px}
+  .hero__title-tattoo{letter-spacing:.5em;padding-left:.5em}
   .reveal-letter{display:inline-block}
   .nav__cta span{display:none}  /* compact CTA on tiny */
   .nav__cta{padding:9px 12px;gap:0}
