@@ -138,16 +138,16 @@ window.addEventListener('load', () => {
   tick();
 })();
 
-/* ---------- relics: build the gallery grid ---------- */
+/* ---------- relics: Isaac Roque's actual work ---------- */
 const RELICS = [
-  { src:'assets/img/relic-01.webp', title:'Madonna of the Forearm',  no:'PLATE I',    meta:'Black & grey realism · 9 hours · 2026', klass:'relic--xl relic--landscape' },
-  { src:'assets/img/relic-02.webp', title:'The Sacred Heart',        no:'PLATE II',   meta:'Sternum · 6 hours · 2026',              klass:'relic--lg relic--portrait'  },
-  { src:'assets/img/relic-03.webp', title:'The Patriarch',           no:'PLATE III',  meta:'Bicep portrait · full day · 2026',      klass:'relic--md relic--landscape' },
-  { src:'assets/img/relic-04.webp', title:'Rosary, Hands, Light',    no:'PLATE IV',   meta:'Calf · 5 hours · 2026',                 klass:'relic--sm relic--portrait'  },
-  { src:'assets/img/relic-05.webp', title:'Cross of Filigree',       no:'PLATE V',    meta:'Spine · fine line · 7 hours · 2025',    klass:'relic--sm relic--portrait'  },
-  { src:'assets/img/relic-06.webp', title:'Lion of the Clouds',      no:'PLATE VI',   meta:'Neck → shoulder · 8 hours · 2025',      klass:'relic--md relic--landscape' },
-  { src:'assets/img/relic-07.webp', title:'Memento on the Hand',     no:'PLATE VII',  meta:'Hand · dotwork · 4 hours · 2026',       klass:'relic--sm relic--square'    },
-  { src:'assets/img/relic-08.webp', title:'Hours of the Studio',     no:'PLATE VIII', meta:'In session · documentary · 2026',       klass:'relic--lg relic--landscape' },
+  { src:'assets/img/isaac-08.webp', title:'Ecce Homo',                no:'PLATE I',    meta:'Christ profile · upper arm · 14 hrs',         klass:'relic--lg relic--portrait'  },
+  { src:'assets/img/isaac-07.webp', title:'Madonna del Silencio',     no:'PLATE II',   meta:'Virgin in prayer · forearm · 11 hrs',         klass:'relic--md relic--portrait'  },
+  { src:'assets/img/isaac-03.webp', title:'Fides',                    no:'PLATE III',  meta:'Christ & three crosses · half sleeve · 18 hrs', klass:'relic--xl relic--portrait' },
+  { src:'assets/img/isaac-06.webp', title:'The Cherub',               no:'PLATE IV',   meta:'Cherub & dove · forearm · 12 hrs',            klass:'relic--md relic--portrait'  },
+  { src:'assets/img/isaac-01.webp', title:'The Watcher',              no:'PLATE V',    meta:'Cosmic sleeve · full leg · 26 hrs',           klass:'relic--md relic--tall'      },
+  { src:'assets/img/isaac-02.webp', title:'Daughter of Sorrow',       no:'PLATE VI',   meta:'Crowned portrait · upper arm · 10 hrs',       klass:'relic--sm relic--portrait'  },
+  { src:'assets/img/isaac-05.webp', title:'The Watcher in the Pines', no:'PLATE VII',  meta:'Wolf & forest · thigh · 13 hrs',              klass:'relic--md relic--portrait'  },
+  { src:'assets/img/isaac-04.webp', title:'Calvary in Bloom',         no:'PLATE VIII', meta:'Cross & roses · calf · 9 hrs',                klass:'relic--lg relic--portrait'  },
 ];
 
 (() => {

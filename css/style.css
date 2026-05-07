@@ -152,6 +152,26 @@ body.is-ready .depth__art.is-mid.is-red{opacity:.30}
 body.is-ready .depth__art.is-midnear.is-red{opacity:.34}
 body.is-ready .depth__art.is-near.is-red{opacity:.42}
 
+/* Isaac's actual stencils — black PNGs on transparent bg, mix into the parchment */
+.depth__art.is-stencil{
+  mix-blend-mode:multiply;
+  filter:contrast(1.1);
+}
+body.is-ready .depth__art.is-stencil{opacity:.20}
+body.is-ready .depth__art.is-stencil.is-far{opacity:.14}
+body.is-ready .depth__art.is-stencil.is-midfar{opacity:.18}
+body.is-ready .depth__art.is-stencil.is-mid{opacity:.22}
+body.is-ready .depth__art.is-stencil.is-midnear{opacity:.26}
+body.is-ready .depth__art.is-stencil.is-near{opacity:.32}
+
+/* dark theme — invert stencils so the linework reads white on velvet */
+[data-theme="dark"] .depth__art.is-stencil{
+  mix-blend-mode:screen;
+  filter:invert(1) contrast(1.1) brightness(.9);
+}
+[data-theme="dark"] body.is-ready .depth__art.is-stencil{opacity:.14}
+[data-theme="dark"] body.is-ready .depth__art.is-stencil.is-near{opacity:.22}
+
 /* dark theme — shift to glowing inks on velvet */
 [data-theme="dark"] .depth__art{mix-blend-mode:screen}
 [data-theme="dark"] body.is-ready .depth__art{opacity:.10}
