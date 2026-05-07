@@ -103,24 +103,111 @@
 }
 
 /* =========================================================
+   DEPTH FIELD — fixed parallax canvas of background tattoos
+========================================================= */
+.depth{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  overflow:visible;
+  perspective:1200px;
+  transform-style:preserve-3d;
+}
+.depth__art{
+  position:absolute;
+  left:var(--x);
+  top:var(--y);
+  width:var(--w);
+  height:auto;
+  transform:translate3d(-50%, var(--py,0), 0) rotate(var(--r,0deg)) scale(var(--s,1));
+  transform-origin:50% 50%;
+  will-change:transform, opacity;
+  mix-blend-mode:multiply;
+  opacity:0;
+  transition:opacity 1.2s var(--ease-out);
+}
+body.is-ready .depth__art{opacity:.18}
+body.is-ready .depth__art.is-far{opacity:.13}
+body.is-ready .depth__art.is-midfar{opacity:.16}
+body.is-ready .depth__art.is-mid{opacity:.20}
+body.is-ready .depth__art.is-midnear{opacity:.22}
+body.is-ready .depth__art.is-near{opacity:.28}
+
+/* tints — work via stroke color (currentColor) */
+.depth__art[data-tint="sepia"]{color:#5C401E}
+.depth__art[data-tint="bronze"]{color:#8C6B2E}
+.depth__art[data-tint="gold"]{color:#A6802C}
+.depth__art[data-tint="crimson"]{color:#7A1D22}
+.depth__art[data-tint="charcoal"]{color:#1F1408}
+.depth__art[data-tint="ash"]{color:#3E2D17}
+
+/* dark theme — shift to glowing inks on velvet */
+[data-theme="dark"] .depth__art{mix-blend-mode:screen}
+[data-theme="dark"] body.is-ready .depth__art{opacity:.10}
+[data-theme="dark"] body.is-ready .depth__art.is-far{opacity:.06}
+[data-theme="dark"] body.is-ready .depth__art.is-midfar{opacity:.08}
+[data-theme="dark"] body.is-ready .depth__art.is-mid{opacity:.10}
+[data-theme="dark"] body.is-ready .depth__art.is-midnear{opacity:.13}
+[data-theme="dark"] body.is-ready .depth__art.is-near{opacity:.16}
+[data-theme="dark"] .depth__art[data-tint="sepia"]{color:#A88962}
+[data-theme="dark"] .depth__art[data-tint="bronze"]{color:#C9A96B}
+[data-theme="dark"] .depth__art[data-tint="gold"]{color:#D9B968}
+[data-theme="dark"] .depth__art[data-tint="crimson"]{color:#A03840}
+[data-theme="dark"] .depth__art[data-tint="charcoal"]{color:#5A4830}
+[data-theme="dark"] .depth__art[data-tint="ash"]{color:#7A6850}
+
+/* slow drift / breathing — independent of scroll */
+@keyframes depthDrift{
+  0%,100%{transform:translate3d(-50%, var(--py,0), 0) rotate(var(--r,0deg)) scale(var(--s,1))}
+  50%{transform:translate3d(-50%, calc(var(--py,0px) - 6px), 0) rotate(calc(var(--r,0deg) + 1deg)) scale(calc(var(--s,1) * 1.015))}
+}
+.depth__art.is-far{animation:depthDrift 14s ease-in-out infinite}
+.depth__art.is-midfar{animation:depthDrift 11s ease-in-out infinite}
+.depth__art.is-mid{animation:depthDrift 9s ease-in-out infinite}
+.depth__art.is-midnear{animation:depthDrift 8s ease-in-out infinite}
+.depth__art.is-near{animation:depthDrift 7s ease-in-out infinite}
+
+/* mobile: thin out the depth field — keep only far + a few mid for atmosphere */
+@media (max-width:780px){
+  .depth__art{display:none}
+  .depth__art.is-far,
+  .depth__art.is-mid:nth-of-type(odd){display:block;opacity:.10 !important;width:calc(var(--w) * 0.7)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .depth__art{animation:none !important}
+}
+
+/* =========================================================
    reset & base
 ========================================================= */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;background:var(--bg);color:var(--fg);transition:background .8s var(--ease),color .8s var(--ease)}
+html{
+  scroll-behavior:smooth;
+  background:var(--bg-gradient);
+  background-attachment:fixed;
+  color:var(--fg);
+  transition:background .8s var(--ease),color .8s var(--ease);
+}
 body{
   font-family:var(--serif);
   font-size:18px;
   line-height:1.55;
   color:var(--fg);
-  background:var(--bg-gradient);
-  background-attachment:fixed;
+  background:transparent;  /* depth field shows through */
   overflow-x:hidden;
   font-feature-settings:"liga","dlig","ss01";
   text-rendering:optimizeLegibility;
   -webkit-font-smoothing:antialiased;
   cursor:none;
-  transition:background .8s var(--ease),color .8s var(--ease);
+  transition:color .8s var(--ease);
+  position:relative;       /* establish stacking context for content */
+  z-index:0;
 }
+/* main content sits above .depth (z-index:-1) */
+.nav,main,.foot,.cursor,.grain,.loader{position:relative;z-index:1}
+.cursor{z-index:1000}.grain{z-index:900}.loader{z-index:1100}
 body.is-loading{overflow:hidden;height:100vh}
 
 img,svg{display:block;max-width:100%}

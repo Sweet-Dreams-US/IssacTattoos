@@ -222,6 +222,102 @@ const RELICS = [
   targets.forEach(t => io.observe(t));
 })();
 
+/* ---------- depth field parallax (5 layers, smooth lerp) ---------- */
+(() => {
+  if (reduced) return;
+  // gate parallax for actual touch devices only — small viewport alone shouldn't kill it
+  if (window.matchMedia('(hover:none) and (pointer:coarse)').matches) return;
+
+  const arts = $$('.depth__art');
+  if (!arts.length) return;
+
+  // capture each art's own starting top in viewport-relative px and rotation
+  const items = arts.map(el => {
+    const speed = parseFloat(el.dataset.speed) || 0.2;
+    const baseRot = parseFloat(el.dataset.rot) || 0;
+    return { el, speed, baseRot, py: 0, target: 0, rot: baseRot, rotTarget: baseRot };
+  });
+
+  let scrollY_ = scrollY;
+  addEventListener('scroll', () => { scrollY_ = scrollY; }, { passive:true });
+
+  // mouse-driven gentle parallax in X for an extra dimension
+  let mxN = 0, myN = 0;  // normalized -0.5..0.5
+  let mxC = 0, myC = 0;
+  addEventListener('mousemove', e => {
+    mxN = (e.clientX / innerWidth - 0.5);
+    myN = (e.clientY / innerHeight - 0.5);
+  }, { passive:true });
+
+  function tick(){
+    // ease the mouse offset
+    mxC += (mxN - mxC) * 0.05;
+    myC += (myN - myC) * 0.05;
+
+    items.forEach(it => {
+      // each layer's base translateY = -scrollY * (1 - speed) so far layers stay almost still
+      // but we ALSO want some movement for the parallax effect
+      it.target = -scrollY_ * (1 - it.speed);
+      it.py += (it.target - it.py) * 0.10;
+
+      // small rotation drift based on scroll position
+      it.rotTarget = it.baseRot + (scrollY_ * 0.005 * (1 - it.speed)) * (it.baseRot >= 0 ? 1 : -1);
+      it.rot += (it.rotTarget - it.rot) * 0.06;
+
+      // small mouse-driven X (closer layers move more with mouse)
+      const xOff = mxC * 30 * it.speed;
+      const yOff = myC * 14 * it.speed;
+
+      // write to CSS vars consumed by transform
+      it.el.style.setProperty('--py', `${it.py + yOff}px`);
+      it.el.style.setProperty('--r', `${it.rot}deg`);
+      it.el.style.setProperty('--s', '1');
+      // transform composition is in CSS, but we also nudge X via translate
+      it.el.style.transform = `translate3d(calc(-50% + ${xOff}px), ${it.py + yOff}px, 0) rotate(${it.rot}deg)`;
+    });
+
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+/* ---------- 3D card tilt on mouse (creed, step, flash, visit, relic) ---------- */
+(() => {
+  if (reduced) return;
+  const fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if (!fine) return;
+
+  const cards = $$('.creed, .step, .visit__card, .flash-card, .relic, .interlude__media');
+  cards.forEach(c => {
+    c.style.willChange = 'transform';
+    c.style.transformStyle = 'preserve-3d';
+    let raf = 0, rx = 0, ry = 0, txTarget = 0, tyTarget = 0;
+
+    c.addEventListener('mousemove', e => {
+      const r = c.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      // tilt up-down based on cursor Y, left-right based on cursor X
+      tyTarget = (px - 0.5) * 8;   // rotateY
+      txTarget = -(py - 0.5) * 6;  // rotateX
+      if (!raf) raf = requestAnimationFrame(loop);
+    });
+    c.addEventListener('mouseleave', () => { txTarget = 0; tyTarget = 0; });
+
+    function loop(){
+      rx += (txTarget - rx) * 0.12;
+      ry += (tyTarget - ry) * 0.12;
+      c.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
+      if (Math.abs(rx - txTarget) > 0.02 || Math.abs(ry - tyTarget) > 0.02) {
+        raf = requestAnimationFrame(loop);
+      } else {
+        c.style.transform = '';
+        raf = 0;
+      }
+    }
+  });
+})();
+
 /* ---------- magnetic buttons (subtle pull toward cursor) ---------- */
 (() => {
   if (reduced) return;
