@@ -884,28 +884,64 @@
   </div>
 
   <p class="booking__intro">
-    The chair is open by application. Tell us what the piece is for. We respond personally
-    within two working days.
+    Pick up to <strong>three preferred dates</strong> below, tell us about the piece, and Isaac will
+    write back personally within two working days.
   </p>
 
   <form class="booking__form" id="bookingForm" novalidate>
+
+    <!-- ===== CALENDAR (the main interaction) ===== -->
+    <div class="cal field--wide" id="cal">
+      <div class="cal__head">
+        <span class="kicker"><span class="field__num">01</span>Preferred dates</span>
+        <div class="cal__nav">
+          <button type="button" class="cal__btn" data-cal-prev aria-label="Previous month">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 6 L9 12 L15 18"/></svg>
+          </button>
+          <span class="cal__month" id="calMonthLabel">—</span>
+          <button type="button" class="cal__btn" data-cal-next aria-label="Next month">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 6 L15 12 L9 18"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="cal__legend" aria-hidden="true">
+        <span><i class="cal__swatch cal__swatch--open"></i>Open</span>
+        <span><i class="cal__swatch cal__swatch--hold"></i>Holding</span>
+        <span><i class="cal__swatch cal__swatch--booked"></i>Booked</span>
+        <span><i class="cal__swatch cal__swatch--closed"></i>Closed</span>
+      </div>
+
+      <div class="cal__months" id="calMonths" role="grid">
+        <!-- populated by JS: 2 month grids side-by-side on desktop, stacked on mobile -->
+      </div>
+
+      <div class="cal__chips-row">
+        <span class="cal__chips-label">Selected:</span>
+        <div class="cal__chips" id="calChips" aria-live="polite">
+          <span class="cal__hint">— pick up to 3 —</span>
+        </div>
+      </div>
+      <input type="hidden" name="dates" id="calHiddenDates" required />
+    </div>
+
     <div class="field">
-      <label for="bf-name"><span class="field__num">01</span>Your name</label>
+      <label for="bf-name"><span class="field__num">02</span>Your name</label>
       <input type="text" id="bf-name" name="name" required autocomplete="name" />
     </div>
 
     <div class="field">
-      <label for="bf-email"><span class="field__num">02</span>Email</label>
+      <label for="bf-email"><span class="field__num">03</span>Email</label>
       <input type="email" id="bf-email" name="email" required autocomplete="email" />
     </div>
 
     <div class="field">
-      <label for="bf-placement"><span class="field__num">03</span>Placement</label>
+      <label for="bf-placement"><span class="field__num">04</span>Placement</label>
       <input type="text" id="bf-placement" name="placement" placeholder="e.g. inner forearm, sternum, calf…" />
     </div>
 
     <div class="field">
-      <label for="bf-style"><span class="field__num">04</span>Subject &amp; style</label>
+      <label for="bf-style"><span class="field__num">05</span>Subject &amp; style</label>
       <select id="bf-style" name="style">
         <option>Black &amp; grey portrait</option>
         <option>Religious / sacred ornament</option>
@@ -917,7 +953,7 @@
     </div>
 
     <div class="field field--wide">
-      <label for="bf-story"><span class="field__num">05</span>What is the piece for?</label>
+      <label for="bf-story"><span class="field__num">06</span>What is the piece for?</label>
       <textarea id="bf-story" name="story" rows="4" placeholder="A line, a paragraph, a confession. Whatever you have."></textarea>
     </div>
 
@@ -929,7 +965,7 @@
     </div>
 
     <button type="submit" class="btn btn--primary btn--block">
-      <span class="btn__label">Send Application</span>
+      <span class="btn__label">Request a Sitting</span>
       <span class="btn__arrow">⟶</span>
     </button>
 

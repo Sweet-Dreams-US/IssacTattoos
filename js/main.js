@@ -365,12 +365,173 @@ const RELICS = [
   $$('.works__grid .relic').forEach((c,i) => c.style.transitionDelay = (i*.06)+'s');
 })();
 
-/* ---------- booking form ---------- */
+/* ---------- booking calendar ---------- */
 (() => {
-  const form = $('#bookingForm');
+  const root = $('#cal');
+  if (!root) return;
+
+  const monthsEl  = $('#calMonths', root);
+  const labelEl   = $('#calMonthLabel', root);
+  const chipsEl   = $('#calChips', root);
+  const hiddenEl  = $('#calHiddenDates', root);
+  const prevBtn   = $('[data-cal-prev]', root);
+  const nextBtn   = $('[data-cal-next]', root);
+
+  const MAX_DATES = 3;
+  const WEEKDAYS  = ['S','M','T','W','T','F','S'];
+  const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  // Reliquary house rules — Sun (0) and Mon (1) are closed for drawing days
+  const CLOSED_DOW = new Set([0, 1]);
+
+  // Deterministic pseudo-booked / on-hold dates (so demo looks realistic).
+  // Hash the date to a stable status. ~30% of open days are booked, ~12% on hold.
+  function statusFor(date){
+    const today = new Date(); today.setHours(0,0,0,0);
+    const d = new Date(date); d.setHours(0,0,0,0);
+    if (d < today) return 'past';
+    if (CLOSED_DOW.has(d.getDay())) return 'closed';
+    // simple hash: y*372 + m*31 + day
+    const h = (d.getFullYear() * 372) + (d.getMonth() * 31) + d.getDate();
+    const r = (h * 9301 + 49297) % 233280 / 233280;  // [0,1)
+    if (r < 0.30) return 'booked';
+    if (r < 0.42) return 'hold';
+    return 'open';
+  }
+
+  const isoDate = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const fmtChip = d => `${MONTH_NAMES[d.getMonth()].slice(0,3).toUpperCase()} ${d.getDate()}`;
+
+  // STATE
+  const today = new Date(); today.setHours(0,0,0,0);
+  let viewYear  = today.getFullYear();
+  let viewMonth = today.getMonth();          // 0-11
+  const selected = new Set();                // ISO date strings
+
+  function buildMonth(year, month){
+    const block = el('div', { class:'cal__month-block' });
+    const monthDate = new Date(year, month, 1);
+    const monthLabel = `${MONTH_NAMES[month]} ${year}`;
+    block.appendChild(el('div', { class:'cal__month-block-label', text: monthLabel }));
+
+    const wd = el('div', { class:'cal__weekdays' });
+    WEEKDAYS.forEach(d => wd.appendChild(el('span', { text:d })));
+    block.appendChild(wd);
+
+    const grid = el('div', { class:'cal__grid' });
+    const startDow = monthDate.getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // leading filler cells
+    for (let i = 0; i < startDow; i++) {
+      grid.appendChild(el('span', { class:'cal__day cal__day--filler' }));
+    }
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      const status = statusFor(date);
+      const iso = isoDate(date);
+      const cell = el('button', {
+        type:'button',
+        class:`cal__day cal__day--${status}`,
+        'aria-label':`${MONTH_NAMES[month]} ${day} — ${status}`,
+        text: String(day),
+      });
+      cell.dataset.iso = iso;
+      cell.dataset.status = status;
+      if (status === 'past' || status === 'closed' || status === 'booked'){
+        cell.disabled = true;
+      } else {
+        cell.addEventListener('click', () => toggleDate(iso));
+      }
+      if (selected.has(iso)) cell.classList.add('cal__day--selected');
+      grid.appendChild(cell);
+    }
+    block.appendChild(grid);
+    return block;
+  }
+
+  function render(){
+    monthsEl.replaceChildren();
+    monthsEl.appendChild(buildMonth(viewYear, viewMonth));
+    const next = new Date(viewYear, viewMonth + 1, 1);
+    monthsEl.appendChild(buildMonth(next.getFullYear(), next.getMonth()));
+    labelEl.textContent = `${MONTH_NAMES[viewMonth].slice(0,3).toUpperCase()} – ${MONTH_NAMES[next.getMonth()].slice(0,3).toUpperCase()} ${next.getFullYear()}`;
+    // disable prev when at current month
+    const atToday = (viewYear === today.getFullYear() && viewMonth === today.getMonth());
+    prevBtn.disabled = atToday;
+    renderChips();
+  }
+
+  function renderChips(){
+    chipsEl.replaceChildren();
+    if (selected.size === 0){
+      chipsEl.appendChild(el('span', { class:'cal__hint', text:'— pick up to 3 —' }));
+    } else {
+      const sorted = [...selected].sort();
+      sorted.forEach(iso => {
+        const [y,m,d] = iso.split('-').map(Number);
+        const date = new Date(y, m-1, d);
+        const chip = el('span', { class:'cal__chip' }, fmtChip(date));
+        const x = el('button', { type:'button', class:'cal__chip-x', 'aria-label':`Remove ${fmtChip(date)}` }, '✕');
+        x.addEventListener('click', () => toggleDate(iso));
+        chip.appendChild(x);
+        chipsEl.appendChild(chip);
+      });
+    }
+    hiddenEl.value = [...selected].sort().join(', ');
+    if (hiddenEl.value) hiddenEl.setCustomValidity('');
+  }
+
+  function toggleDate(iso){
+    if (selected.has(iso)) {
+      selected.delete(iso);
+    } else {
+      if (selected.size >= MAX_DATES) {
+        // remove the oldest selection to make room
+        const first = [...selected][0];
+        selected.delete(first);
+      }
+      selected.add(iso);
+    }
+    render();
+  }
+
+  prevBtn.addEventListener('click', () => {
+    const next = new Date(viewYear, viewMonth - 1, 1);
+    if (next < new Date(today.getFullYear(), today.getMonth(), 1)) return;
+    viewYear  = next.getFullYear();
+    viewMonth = next.getMonth();
+    render();
+  });
+  nextBtn.addEventListener('click', () => {
+    const next = new Date(viewYear, viewMonth + 1, 1);
+    viewYear  = next.getFullYear();
+    viewMonth = next.getMonth();
+    render();
+  });
+
+  render();
+})();
+
+/* ---------- booking form submit ---------- */
+(() => {
+  const form    = $('#bookingForm');
   if (!form) return;
+  const hidden  = $('#calHiddenDates');
+
   form.addEventListener('submit', e => {
     e.preventDefault();
+    // require at least one date selected
+    if (hidden && !hidden.value){
+      hidden.setCustomValidity('Please pick at least one preferred date.');
+      // bring the calendar into view + highlight
+      const cal = $('#cal');
+      cal.classList.add('cal--invalid');
+      cal.scrollIntoView({ behavior:'smooth', block:'center' });
+      setTimeout(() => cal.classList.remove('cal--invalid'), 1600);
+      form.reportValidity();
+      return;
+    }
     const ok = form.reportValidity();
     if (!ok) return;
     form.querySelectorAll('input,select,textarea,button').forEach(node => node.disabled = true);
