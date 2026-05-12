@@ -231,8 +231,6 @@ const RELICS = [
 /* ---------- depth field parallax (5 layers, smooth lerp) ---------- */
 (() => {
   if (reduced) return;
-  // gate parallax for actual touch devices only — small viewport alone shouldn't kill it
-  if (window.matchMedia('(hover:none) and (pointer:coarse)').matches) return;
 
   const arts = $$('.depth__art');
   if (!arts.length) return;
@@ -248,15 +246,19 @@ const RELICS = [
   addEventListener('scroll', () => { scrollY_ = scrollY; }, { passive:true });
 
   // mouse-driven gentle parallax in X for an extra dimension
+  // (touch devices never fire mousemove, so mxC/myC stay 0 — zero overhead)
+  const hasFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
   let mxN = 0, myN = 0;  // normalized -0.5..0.5
   let mxC = 0, myC = 0;
-  addEventListener('mousemove', e => {
-    mxN = (e.clientX / innerWidth - 0.5);
-    myN = (e.clientY / innerHeight - 0.5);
-  }, { passive:true });
+  if (hasFinePointer){
+    addEventListener('mousemove', e => {
+      mxN = (e.clientX / innerWidth - 0.5);
+      myN = (e.clientY / innerHeight - 0.5);
+    }, { passive:true });
+  }
 
   function tick(){
-    // ease the mouse offset
+    // ease the mouse offset (skipped if zero — no harm to compute)
     mxC += (mxN - mxC) * 0.05;
     myC += (myN - myC) * 0.05;
 
@@ -270,7 +272,7 @@ const RELICS = [
       it.rotTarget = it.baseRot + (scrollY_ * 0.005 * (1 - it.speed)) * (it.baseRot >= 0 ? 1 : -1);
       it.rot += (it.rotTarget - it.rot) * 0.06;
 
-      // small mouse-driven X (closer layers move more with mouse)
+      // small mouse-driven X (closer layers move more with mouse — 0 on touch)
       const xOff = mxC * 30 * it.speed;
       const yOff = myC * 14 * it.speed;
 
