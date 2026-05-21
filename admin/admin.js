@@ -719,7 +719,7 @@ function render(){
 }
 
 /* =========================================================
-   LOGIN GATE + BOOT
+   BOOT — opens straight to the dashboard (no gate; this is a demo)
 ========================================================= */
 function boot(){
   DB.ensure();
@@ -732,29 +732,8 @@ function boot(){
 
   $('#menuToggle')?.addEventListener('click', ()=> document.body.classList.toggle('nav-open'));
   $('#scrim')?.addEventListener('click', ()=> document.body.classList.remove('nav-open'));
-  $('#signOut')?.addEventListener('click', ()=>{
-    sessionStorage.removeItem('reliquary.auth');
-    location.reload();
-  });
 }
 
-(function initGate(){
-  const gate = $('#gate'), app = $('#app');
-  const authed = sessionStorage.getItem('reliquary.auth') === '1';
-  if (authed){ gate.hidden = true; app.hidden = false; boot(); return; }
-
-  $('#gateForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const pass = $('#gatePass').value.trim().toLowerCase();
-    if (pass === 'roque'){
-      sessionStorage.setItem('reliquary.auth','1');
-      gate.hidden = true; app.hidden = false;
-      boot();
-    } else {
-      $('#gateErr').hidden = false;
-      $('#gatePass').value = '';
-    }
-  });
-})();
+boot();
 
 })();

@@ -15,30 +15,9 @@
 <body>
 
 <!-- =========================================================
-     LOGIN GATE
-========================================================= -->
-<div class="gate" id="gate">
-  <div class="gate__card">
-    <svg class="gate__sigil" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1">
-      <path d="M30 4 C 38 10, 52 18, 54 28 C 56 40, 50 50, 30 56 C 10 50, 4 40, 6 28 C 8 18, 22 10, 30 4 Z" />
-      <path d="M30 22 C 26 16, 18 16, 18 24 C 18 32, 30 40, 30 40 C 30 40, 42 32, 42 24 C 42 16, 34 16, 30 22 Z" />
-    </svg>
-    <div class="gate__word">RELIQUARY</div>
-    <div class="gate__sub">Studio Panel · Staff Only</div>
-    <form class="gate__form" id="gateForm">
-      <label for="gatePass">Passcode</label>
-      <input type="password" id="gatePass" autocomplete="off" placeholder="••••••••" />
-      <button type="submit">Enter the Studio</button>
-      <p class="gate__err" id="gateErr" hidden>Incorrect passcode.</p>
-      <p class="gate__hint">Demo passcode — <strong>roque</strong></p>
-    </form>
-  </div>
-</div>
-
-<!-- =========================================================
      APP SHELL
 ========================================================= -->
-<div class="app" id="app" hidden>
+<div class="app" id="app">
 
   <aside class="side" id="side">
     <a class="side__brand" href="../index.html">
@@ -88,10 +67,10 @@
       </a>
     </nav>
 
-    <button class="side__out" id="signOut">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M14 4H6v16h8M10 12h10M17 8l4 4-4 4"/></svg>
-      <span>Sign out</span>
-    </button>
+    <a class="side__out" href="../index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 4H6v16h4M14 8l-4 4 4 4M10 12h10"/></svg>
+      <span>View public site</span>
+    </a>
   </aside>
 
   <div class="main">

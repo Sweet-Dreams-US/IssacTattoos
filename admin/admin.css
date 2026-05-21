@@ -53,53 +53,6 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:500;letter-spacing:.02em}
 }
 
 /* =========================================================
-   LOGIN GATE
-========================================================= */
-.gate{
-  position:fixed;inset:0;z-index:100;
-  display:grid;place-items:center;
-  background:
-    radial-gradient(900px 600px at 50% 0%, #1A1712 0%, #0E0D0C 70%),
-    var(--bg);
-  padding:24px;
-}
-.gate__card{
-  width:min(380px,92vw);
-  text-align:center;
-  border:1px solid var(--line);
-  background:var(--panel);
-  padding:48px 36px 40px;
-}
-.gate__sigil{width:54px;height:54px;color:var(--brass);margin:0 auto 18px}
-.gate__word{font-family:var(--display);font-weight:600;letter-spacing:.42em;font-size:18px;padding-left:.42em}
-.gate__sub{
-  font-family:var(--display);font-size:9px;letter-spacing:.34em;text-transform:uppercase;
-  color:var(--fg-mute);margin-top:10px;
-}
-.gate__form{display:flex;flex-direction:column;gap:12px;margin-top:32px;text-align:left}
-.gate__form label{font-family:var(--display);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--brass)}
-.gate__form input{
-  padding:13px 14px;background:var(--bg);
-  border:1px solid var(--line-strong);
-  color:var(--fg);font-size:16px;letter-spacing:.2em;
-  transition:border-color .2s var(--ease);
-}
-.gate__form input:focus{outline:0;border-color:var(--brass)}
-.gate__form button{
-  margin-top:6px;padding:14px;
-  background:var(--brass);color:#161009;
-  font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;
-  transition:background .2s var(--ease),transform .2s var(--ease);
-}
-.gate__form button:hover{background:var(--brass-bright);transform:translateY(-1px)}
-.gate__err{color:var(--crimson);font-style:italic;font-size:14px;text-align:center}
-.gate__hint{
-  text-align:center;color:var(--fg-mute);font-size:12px;font-style:italic;
-  margin-top:4px;
-}
-.gate__hint strong{color:var(--brass);font-style:normal;letter-spacing:.1em}
-
-/* =========================================================
    APP LAYOUT
 ========================================================= */
 .app{display:grid;grid-template-columns:var(--side-w) 1fr;min-height:100vh}
