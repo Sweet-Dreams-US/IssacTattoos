@@ -536,6 +536,27 @@ const RELICS = [
     }
     const ok = form.reportValidity();
     if (!ok) return;
+
+    /* persist the request so it lands in the studio panel (admin/) — same
+       browser only; swap localStorage for a backend POST to go cross-device */
+    try {
+      const val = id => (document.getElementById(id)?.value || '').trim();
+      const KEY = 'reliquary.requests';
+      const reqs = JSON.parse(localStorage.getItem(KEY) || '[]');
+      reqs.unshift({
+        id: 'r' + Date.now(),
+        name: val('bf-name') || 'Unnamed',
+        email: val('bf-email'),
+        placement: val('bf-placement') || '—',
+        style: val('bf-style'),
+        story: val('bf-story') || '—',
+        dates: hidden && hidden.value ? hidden.value.split(',').map(s => s.trim()) : [],
+        status: 'new',
+        created: new Date().toISOString().slice(0, 10),
+      });
+      localStorage.setItem(KEY, JSON.stringify(reqs));
+    } catch {}
+
     form.querySelectorAll('input,select,textarea,button').forEach(node => node.disabled = true);
     $('#bookingSignoff').hidden = false;
   });
